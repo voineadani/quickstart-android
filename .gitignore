@@ -8,6 +8,8 @@ build/
 *.aar
 *.zip
 google-services.json
+__pycache__/
+*.pyc
 
 .project
 .settings
