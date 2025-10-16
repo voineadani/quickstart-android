@@ -35,6 +35,35 @@ the sample you wish to run.
 - [Performance Monitoring](perf/README.md)
 - [Storage](storage/README.md)
 
+## Project Management
+
+A Python-based project management system is available to help manage the Firebase quickstart modules:
+
+```bash
+# List all modules
+python project_management_system.py list
+
+# Setup all modules with mock google-services.json
+python project_management_system.py setup-all
+
+# Setup a specific module
+python project_management_system.py setup --module auth
+
+# Build a specific module
+python project_management_system.py build --module analytics
+
+# Run tests for a module
+python project_management_system.py test --module database
+
+# Display project information
+python project_management_system.py info
+```
+
+For more commands and usage, run:
+```bash
+python project_management_system.py --help
+```
+
 ## How to make contributions?
 Please read and follow the steps in the [CONTRIBUTING.md](CONTRIBUTING.md)
 
