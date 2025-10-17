@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: ../docker/Dockerfile
+    container_name: hunting_data_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - hunting_data_network
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:alpine
+    container_name: hunting_data_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend:/var/www
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - hunting_data_network
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.0
+    container_name: hunting_data_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: hunting_data_system
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: hunting_user
+      MYSQL_PASSWORD: hunting_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - hunting_data_network
+
+networks:
+  hunting_data_network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local

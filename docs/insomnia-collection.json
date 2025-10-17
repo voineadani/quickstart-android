@@ -1,0 +1,410 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "resources": [
+    {
+      "_type": "request_group",
+      "name": "Hunting Data System API",
+      "description": "Complete API collection for the Hunting Data System",
+      "environment": {},
+      "metaSortKey": -1000000000000
+    },
+    {
+      "_type": "request_group",
+      "parentId": "wrk_hunting_data",
+      "name": "Authentication",
+      "description": "User authentication endpoints"
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Register User",
+      "method": "POST",
+      "url": "{{ base_url }}/auth/register",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Hunter\",\n  \"username\": \"jhunter2\",\n  \"phone\": \"+1-555-4000\",\n  \"email\": \"jane.hunter@example.com\",\n  \"password\": \"password123\",\n  \"role_id\": 1\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{ base_url }}/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"admin@hunting-data.example.com\",\n  \"password\": \"password\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Get Current User",
+      "method": "GET",
+      "url": "{{ base_url }}/me",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Logout",
+      "method": "POST",
+      "url": "{{ base_url }}/auth/logout",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request_group",
+      "parentId": "wrk_hunting_data",
+      "name": "Protocols",
+      "description": "Protocol management endpoints"
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_protocols",
+      "name": "List Protocols",
+      "method": "GET",
+      "url": "{{ base_url }}/protocols",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_protocols",
+      "name": "Create Protocol",
+      "method": "POST",
+      "url": "{{ base_url }}/protocols",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"game_species\": \"White-tailed Deer\",\n  \"animal_sex\": \"M\",\n  \"animal_age\": \"3 years\",\n  \"animal_weight\": 85.5,\n  \"sample_type\": \"muscle tissue\",\n  \"sample_barcode\": \"WTD-2025-001\",\n  \"category\": \"Regular Season\",\n  \"phone_from\": \"+1-555-6789\",\n  \"gps_lat\": 45.4215,\n  \"gps_lon\": -75.6972,\n  \"admin_address\": \"Ottawa, Ontario, Canada\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_protocols",
+      "name": "Get Protocol Details",
+      "method": "GET",
+      "url": "{{ base_url }}/protocols/1",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_protocols",
+      "name": "Assign Lab to Protocol (Admin)",
+      "method": "POST",
+      "url": "{{ base_url }}/protocols/1/assign-lab",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"lab_id\": 1\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request_group",
+      "parentId": "wrk_hunting_data",
+      "name": "Results",
+      "description": "Lab test results endpoints"
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_results",
+      "name": "Get Protocol Results",
+      "method": "GET",
+      "url": "{{ base_url }}/protocols/1/results",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_results",
+      "name": "Submit Test Results (Lab)",
+      "method": "POST",
+      "url": "{{ base_url }}/protocols/1/results",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"trichinella_result\": \"negative\",\n  \"asf_result\": \"negative\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request_group",
+      "parentId": "wrk_hunting_data",
+      "name": "Labs",
+      "description": "Laboratory management (Admin only)"
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_labs",
+      "name": "List Labs",
+      "method": "GET",
+      "url": "{{ base_url }}/labs",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_labs",
+      "name": "Create Lab",
+      "method": "POST",
+      "url": "{{ base_url }}/labs",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Northern Wildlife Testing Lab\",\n  \"admin_address\": \"789 Science Blvd, North City, NC 98765\",\n  \"contact_info\": \"Phone: +1-555-0300\",\n  \"email\": \"info@northern-wildlife-lab.example.com\",\n  \"authorized_for_trichinella\": true,\n  \"authorized_for_asf\": true\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_labs",
+      "name": "Get Lab Details",
+      "method": "GET",
+      "url": "{{ base_url }}/labs/1",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_labs",
+      "name": "Update Lab",
+      "method": "PATCH",
+      "url": "{{ base_url }}/labs/1",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"authorized_for_asf\": false\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_labs",
+      "name": "Delete Lab",
+      "method": "DELETE",
+      "url": "{{ base_url }}/labs/3",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request_group",
+      "parentId": "wrk_hunting_data",
+      "name": "Users",
+      "description": "User management (Admin only)"
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_users",
+      "name": "List Users",
+      "method": "GET",
+      "url": "{{ base_url }}/users",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_users",
+      "name": "Create User",
+      "method": "POST",
+      "url": "{{ base_url }}/users",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"first_name\": \"Bob\",\n  \"last_name\": \"LabTech\",\n  \"username\": \"blabtech\",\n  \"phone\": \"+1-555-5000\",\n  \"email\": \"bob.labtech@example.com\",\n  \"password\": \"password123\",\n  \"role_id\": 2,\n  \"lab_id\": 1,\n  \"status\": \"active\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_users",
+      "name": "Get User Details",
+      "method": "GET",
+      "url": "{{ base_url }}/users/1",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_users",
+      "name": "Update User",
+      "method": "PATCH",
+      "url": "{{ base_url }}/users/2",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"inactive\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_users",
+      "name": "Delete User",
+      "method": "DELETE",
+      "url": "{{ base_url }}/users/5",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ token }}"
+        }
+      ]
+    },
+    {
+      "_type": "request_group",
+      "parentId": "wrk_hunting_data",
+      "name": "Public Map",
+      "description": "Public disease mapping endpoints (no auth required)"
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_map",
+      "name": "Get Map Points (All)",
+      "method": "GET",
+      "url": "{{ base_url }}/public/map/points"
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_map",
+      "name": "Get Map Points (Trichinella Only)",
+      "method": "GET",
+      "url": "{{ base_url }}/public/map/points?disease=trichinella"
+    },
+    {
+      "_type": "request",
+      "parentId": "fld_map",
+      "name": "Get Map Points (BBox Filter)",
+      "method": "GET",
+      "url": "{{ base_url }}/public/map/points?bbox=-76,45,-75,46"
+    },
+    {
+      "_type": "environment",
+      "name": "Local Development",
+      "data": {
+        "base_url": "http://localhost:8000/api",
+        "token": "YOUR_AUTH_TOKEN_HERE"
+      }
+    },
+    {
+      "_type": "environment",
+      "name": "Production",
+      "data": {
+        "base_url": "https://api.hunting-data.example.com/api",
+        "token": "YOUR_AUTH_TOKEN_HERE"
+      }
+    }
+  ]
+}
