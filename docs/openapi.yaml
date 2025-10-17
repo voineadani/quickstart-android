@@ -1,0 +1,748 @@
+openapi: 3.0.3
+info:
+  title: Hunting Data System API
+  description: API for managing hunting protocols, lab results, and public disease mapping
+  version: 1.0.0
+  contact:
+    email: admin@hunting-data.example.com
+
+servers:
+  - url: http://localhost:8000/api
+    description: Local development server
+  - url: https://api.hunting-data.example.com/api
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User authentication endpoints
+  - name: Protocols
+    description: Hunting protocol management
+  - name: Results
+    description: Lab test results
+  - name: Labs
+    description: Laboratory management (Admin only)
+  - name: Users
+    description: User management (Admin only)
+  - name: Public Map
+    description: Public disease mapping data
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - first_name
+                - last_name
+                - username
+                - email
+                - password
+                - role_id
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                username:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                role_id:
+                  type: integer
+                lab_id:
+                  type: integer
+                  nullable: true
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '422':
+          description: Validation error
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '422':
+          description: Invalid credentials
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logged out successfully
+
+  /me:
+    get:
+      tags:
+        - Authentication
+      summary: Get current user information
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /protocols:
+    get:
+      tags:
+        - Protocols
+      summary: List protocols
+      description: Returns protocols based on user role (own for hunters, assigned for lab users, all for admins)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of protocols
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Protocol'
+
+    post:
+      tags:
+        - Protocols
+      summary: Create a new protocol
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - game_species
+                - sample_type
+                - sample_barcode
+                - gps_lat
+                - gps_lon
+              properties:
+                game_species:
+                  type: string
+                animal_sex:
+                  type: string
+                animal_age:
+                  type: string
+                animal_weight:
+                  type: number
+                  format: float
+                sample_type:
+                  type: string
+                sample_barcode:
+                  type: string
+                category:
+                  type: string
+                phone_from:
+                  type: string
+                gps_lat:
+                  type: number
+                  format: double
+                  minimum: -90
+                  maximum: 90
+                gps_lon:
+                  type: number
+                  format: double
+                  minimum: -180
+                  maximum: 180
+                admin_address:
+                  type: string
+      responses:
+        '201':
+          description: Protocol created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Protocol'
+
+  /protocols/{id}:
+    get:
+      tags:
+        - Protocols
+      summary: Get protocol details
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Protocol details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Protocol'
+        '403':
+          description: Unauthorized access
+        '404':
+          description: Protocol not found
+
+  /protocols/{id}/assign-lab:
+    post:
+      tags:
+        - Protocols
+      summary: Assign a lab to protocol (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - lab_id
+              properties:
+                lab_id:
+                  type: integer
+      responses:
+        '200':
+          description: Lab assigned successfully
+        '403':
+          description: Admin access required
+
+  /protocols/{id}/results:
+    get:
+      tags:
+        - Results
+      summary: Get test results for protocol
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Test results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+
+    post:
+      tags:
+        - Results
+      summary: Submit test results (Lab/Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trichinella_result:
+                  type: string
+                  enum: [positive, negative, pending]
+                asf_result:
+                  type: string
+                  enum: [positive, negative, pending]
+      responses:
+        '201':
+          description: Results recorded successfully
+        '403':
+          description: Lab or Admin access required
+
+  /labs:
+    get:
+      tags:
+        - Labs
+      summary: List all labs (Admin only)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of labs
+
+    post:
+      tags:
+        - Labs
+      summary: Create a new lab (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabInput'
+      responses:
+        '201':
+          description: Lab created successfully
+
+  /labs/{id}:
+    get:
+      tags:
+        - Labs
+      summary: Get lab details (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lab details
+
+    patch:
+      tags:
+        - Labs
+      summary: Update lab (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabInput'
+      responses:
+        '200':
+          description: Lab updated successfully
+
+    delete:
+      tags:
+        - Labs
+      summary: Delete lab (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lab deleted successfully
+
+  /users:
+    get:
+      tags:
+        - Users
+      summary: List all users (Admin only)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of users
+
+    post:
+      tags:
+        - Users
+      summary: Create a new user (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: User created successfully
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user details (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User details
+
+    patch:
+      tags:
+        - Users
+      summary: Update user (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: User updated successfully
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User deleted successfully
+
+  /public/map/points:
+    get:
+      tags:
+        - Public Map
+      summary: Get public map points (GeoJSON)
+      description: Returns GeoJSON FeatureCollection of positive disease results
+      parameters:
+        - name: bbox
+          in: query
+          description: Bounding box filter (min_lon,min_lat,max_lon,max_lat)
+          schema:
+            type: string
+        - name: disease
+          in: query
+          description: Filter by disease type (trichinella, asf, or comma-separated)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: GeoJSON FeatureCollection
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: FeatureCollection
+                  features:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: Feature
+                        geometry:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              example: Point
+                            coordinates:
+                              type: array
+                              items:
+                                type: number
+                        properties:
+                          type: object
+                          properties:
+                            disease_flags:
+                              type: array
+                              items:
+                                type: string
+                            recorded_at:
+                              type: string
+                              format: date-time
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        username:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        role_id:
+          type: integer
+        lab_id:
+          type: integer
+        status:
+          type: string
+          enum: [active, inactive]
+        role:
+          $ref: '#/components/schemas/Role'
+        lab:
+          $ref: '#/components/schemas/Lab'
+
+    UserInput:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - username
+        - email
+        - password
+        - role_id
+        - status
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        username:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+          minLength: 8
+        role_id:
+          type: integer
+        lab_id:
+          type: integer
+        status:
+          type: string
+          enum: [active, inactive]
+
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          enum: [HUNTER, LAB, ADMIN]
+        description:
+          type: string
+
+    Lab:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        admin_address:
+          type: string
+        contact_info:
+          type: string
+        email:
+          type: string
+        authorized_for_trichinella:
+          type: boolean
+        authorized_for_asf:
+          type: boolean
+
+    LabInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        admin_address:
+          type: string
+        contact_info:
+          type: string
+        email:
+          type: string
+        authorized_for_trichinella:
+          type: boolean
+        authorized_for_asf:
+          type: boolean
+
+    Protocol:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        game_species:
+          type: string
+        animal_sex:
+          type: string
+        animal_age:
+          type: string
+        animal_weight:
+          type: number
+        sample_type:
+          type: string
+        sample_barcode:
+          type: string
+        category:
+          type: string
+        phone_from:
+          type: string
+        lab_id:
+          type: integer
+        requested_from_lab_at:
+          type: string
+          format: date-time
+        submitted_at:
+          type: string
+          format: date-time
+        created_in_system_at:
+          type: string
+          format: date-time
+        locationData:
+          $ref: '#/components/schemas/LocationData'
+        result:
+          $ref: '#/components/schemas/Result'
+
+    LocationData:
+      type: object
+      properties:
+        id:
+          type: integer
+        protocol_id:
+          type: integer
+        gps_lat:
+          type: number
+          format: double
+        gps_lon:
+          type: number
+          format: double
+        admin_address:
+          type: string
+
+    Result:
+      type: object
+      properties:
+        id:
+          type: integer
+        protocol_id:
+          type: integer
+        trichinella_result:
+          type: string
+          enum: [positive, negative, pending]
+        trichinella_recorded_at:
+          type: string
+          format: date-time
+        asf_result:
+          type: string
+          enum: [positive, negative, pending]
+        asf_recorded_at:
+          type: string
+          format: date-time
+        recorded_by:
+          type: integer
+
+    AuthResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+            token:
+              type: string
+        message:
+          type: string
