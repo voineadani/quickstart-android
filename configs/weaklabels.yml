@@ -1,0 +1,42 @@
+# Weak label generation configuration
+embeddings_path: ./embeddings/embeddings.parquet
+output_path: ./results/weaklabels.csv
+
+# Physics-based thresholds
+thresholds:
+  # Jerk (m/s^3)
+  harsh_brake_jerk: -3.0
+  harsh_accel_jerk: 3.0
+  
+  # Yaw rate (rad/s)
+  left_turn_yaw: 0.3
+  right_turn_yaw: -0.3
+  
+  # Speed change (m/s)
+  emergency_brake_dv: -5.0
+  
+  # Curvature (1/m)
+  sharp_curve_curvature: 0.02
+  
+  # Roundabout detection
+  roundabout:
+    min_duration: 3.0  # seconds
+    min_total_angle: 270  # degrees
+    max_radius: 50  # meters
+
+# GPS requirements
+gps:
+  min_accuracy: 20  # meters
+  min_speed_for_bearing: 1.0  # m/s
+  use_map_matching: false
+  
+# Optional map-based features
+map:
+  enabled: false
+  road_graph_path: null
+  speed_limit_tolerance: 0.2  # 20% over
+
+# Label smoothing
+smoothing:
+  window_size: 5
+  min_confidence: 0.6

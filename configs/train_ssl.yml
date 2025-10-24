@@ -1,0 +1,86 @@
+# Self-supervised learning configuration
+dataset_config: ./configs/dataset.yml
+
+# Model selection: tnc, mae, byol
+method: tnc
+
+# Output paths
+output_dir: ./ckpts
+embeddings_dir: ./embeddings
+
+# Training parameters
+training:
+  batch_size: 128
+  epochs: 100
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  warmup_epochs: 10
+  early_stop_patience: 15
+  
+  # Mixed precision
+  use_amp: true
+  
+  # Device
+  device: auto  # auto, cpu, cuda
+  num_workers: 4
+  
+  # Checkpointing
+  save_every: 5
+  keep_best: true
+
+# Model architecture
+model:
+  # Encoder
+  encoder_type: conv_transformer  # conv, transformer, conv_transformer
+  hidden_dim: 256
+  num_layers: 4
+  dropout: 0.1
+  
+  # TNC specific
+  tnc:
+    window_size_seconds: 3.0
+    overlap: 0.5
+    neighbor_distance: 10  # in windows
+    
+  # MAE specific
+  mae:
+    mask_ratio: 0.75
+    patch_size: 16
+    decoder_dim: 128
+    decoder_depth: 2
+    use_stft: true
+    
+  # BYOL specific
+  byol:
+    projection_dim: 256
+    predictor_dim: 128
+    ema_decay: 0.996
+
+# Augmentation
+augmentation:
+  rotation_degrees: 15
+  jitter_sigma: 0.05
+  scaling_range: [0.9, 1.1]
+  time_warp_rate: 0.1
+  channel_drop_prob: 0.2
+  masking_ratio: 0.15
+  
+  # Cross-modal dropout
+  drop_imu_prob: 0.1
+  drop_gps_prob: 0.1
+
+# Loss weights
+loss:
+  contrastive_weight: 1.0
+  time_warp_weight: 0.5
+  temperature: 0.07
+
+# Validation
+validation:
+  retrieval_k: [1, 5, 10]
+  linear_probe_epochs: 20
+  eval_every: 5
+
+# Reproducibility
+seed: 42
+deterministic: true

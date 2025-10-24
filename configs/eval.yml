@@ -1,0 +1,50 @@
+# Evaluation configuration
+embeddings_path: ./embeddings/embeddings.parquet
+clusters_path: ./results/clusters.parquet
+weaklabels_path: ./results/weaklabels.csv
+output_dir: ./results/eval
+
+# Intrinsic metrics (unlabeled)
+intrinsic:
+  retrieval_k: [1, 5, 10, 20]
+  silhouette_score: true
+  davies_bouldin_score: true
+  augmentation_agreement: true
+  bootstrap_samples: 1000
+  confidence_level: 0.95
+
+# Supervised metrics (if labels available)
+supervised:
+  enabled: false
+  labels_path: null
+  metrics: [precision, recall, f1, pr_auc]
+  
+  # Calibration
+  calibration:
+    enabled: true
+    n_bins: 10
+    
+  # Holdout strategy
+  holdout:
+    by_trip: true
+    by_device: true
+    test_size: 0.2
+
+# Anomaly evaluation
+anomaly:
+  spot_check: true
+  n_samples: 100
+  manual_review: false
+
+# Leakage detection
+leakage:
+  check_temporal: true
+  check_device: true
+  check_trip: true
+  max_overlap: 0.01
+
+# Statistical tests
+statistics:
+  permutation_test: true
+  n_permutations: 1000
+  significance_level: 0.05

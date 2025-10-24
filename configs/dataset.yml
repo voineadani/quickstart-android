@@ -1,0 +1,100 @@
+# Dataset schema and configuration
+data_root: ${IDRIVE_DATA:./data}
+file_format: csv  # csv or parquet
+
+# Schema definition with units
+schema:
+  timestamp:
+    type: datetime
+    required: true
+    format: "%Y-%m-%dT%H:%M:%S.%f"
+  
+  # Accelerometer (m/s^2)
+  accX:
+    type: float
+    required: true
+    unit: m/s2
+  accY:
+    type: float
+    required: true
+    unit: m/s2
+  accZ:
+    type: float
+    required: true
+    unit: m/s2
+  
+  # Gyroscope (rad/s)
+  gyroX:
+    type: float
+    required: true
+    unit: rad/s
+  gyroY:
+    type: float
+    required: true
+    unit: rad/s
+  gyroZ:
+    type: float
+    required: true
+    unit: rad/s
+  
+  # Magnetometer (μT) - optional
+  magX:
+    type: float
+    required: false
+    unit: uT
+  magY:
+    type: float
+    required: false
+    unit: uT
+  magZ:
+    type: float
+    required: false
+    unit: uT
+  
+  # User acceleration (m/s^2) - optional
+  userAccX:
+    type: float
+    required: false
+    unit: m/s2
+  userAccY:
+    type: float
+    required: false
+    unit: m/s2
+  userAccZ:
+    type: float
+    required: false
+    unit: m/s2
+  
+  # GPS
+  lat:
+    type: float
+    required: true
+    unit: degrees
+  lon:
+    type: float
+    required: true
+    unit: degrees
+  speed:
+    type: float
+    required: false
+    unit: m/s
+  bearing:
+    type: float
+    required: false
+    unit: degrees
+  accuracy:
+    type: float
+    required: false
+    unit: meters
+
+# Sampling rates (Hz)
+sampling_rates:
+  imu: 100  # IMU sensors (accel, gyro)
+  gps: 1    # GPS
+
+# Data quality thresholds
+quality:
+  max_gap_seconds: 5.0
+  min_trip_duration_seconds: 60.0
+  max_acc_value: 50.0  # m/s^2
+  max_gyro_value: 10.0  # rad/s
