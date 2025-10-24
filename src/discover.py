@@ -7,6 +7,7 @@ import pandas as pd
 from pathlib import Path
 import argparse
 import logging
+from typing import Dict
 import matplotlib.pyplot as plt
 import seaborn as sns
 from umap import UMAP
