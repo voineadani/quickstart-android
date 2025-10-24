@@ -1,0 +1,39 @@
+# Clustering and discovery configuration
+embeddings_path: ./embeddings/embeddings.parquet
+output_dir: ./results
+
+# UMAP parameters
+umap:
+  n_neighbors: 15
+  min_dist: 0.1
+  n_components: 2
+  metric: cosine
+  random_state: 42
+
+# Clustering method: hdbscan or dbscan
+clustering:
+  method: hdbscan
+  
+  # HDBSCAN parameters
+  hdbscan:
+    min_cluster_size: 50
+    min_samples: 10
+    cluster_selection_epsilon: 0.0
+    
+  # DBSCAN parameters
+  dbscan:
+    eps: 0.5
+    min_samples: 10
+
+# Cluster analysis
+analysis:
+  generate_cards: true
+  n_exemplars: 5
+  plot_waveforms: true
+  plot_distributions: true
+
+# Visualization
+visualization:
+  figsize: [12, 8]
+  dpi: 150
+  save_format: png

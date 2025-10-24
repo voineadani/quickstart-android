@@ -1,0 +1,59 @@
+# Report generation configuration
+data_root: ${IDRIVE_DATA:./data}
+embeddings_path: ./embeddings/embeddings.parquet
+clusters_path: ./results/clusters.parquet
+weaklabels_path: ./results/weaklabels.csv
+anomalies_path: ./results/anomalies.csv
+eval_path: ./results/eval
+output_path: ./results/report.html
+
+# Privacy settings
+privacy:
+  redact_coordinates: true
+  home_work_radius: 500  # meters
+  k_anonymity: 5
+  coordinate_precision: 3  # decimal places
+  path_thinning_factor: 10
+  
+# Report sections
+sections:
+  data_health: true
+  sensor_psds: true
+  maps_lite: true
+  umap_plots: true
+  cluster_analysis: true
+  weak_label_stats: true
+  anomaly_gallery: true
+  calibration_curves: true
+  config_dump: true
+  findings_summary: true
+
+# Visualization settings
+visualization:
+  max_figures: 50
+  figure_width: 1200
+  figure_height: 800
+  interactive: true
+  
+# Question-oriented findings
+findings:
+  - question: "How often do harsh braking events occur?"
+    metric: harsh_brake_rate
+    
+  - question: "Where do anomalies cluster?"
+    metric: anomaly_spatial_distribution
+    
+  - question: "Which clusters look like turns?"
+    metric: turn_cluster_identification
+    
+  - question: "What is the model confidence?"
+    metric: prediction_uncertainty
+    
+  - question: "Are there temporal patterns?"
+    metric: temporal_analysis
+
+# Export settings
+export:
+  include_raw_data: false
+  compress: true
+  format: html
