@@ -187,7 +187,7 @@ Implementation: `SystemMetrics.calculateNetSystemValue()`
 
 ### Constant-Product AMM
 ```
-x · y = k
+x·y = k
 ```
 Implementation: `TokenEconomics` class maintains this invariant
 
@@ -210,12 +210,14 @@ Implementation: `TrafficLinkService.calculateReward()`
 Implements reinforcement/bandit approach as specified:
 
 ```kotlin
-if (acceptanceRate < target):
+// Pseudocode representation of the algorithm
+if (acceptanceRate < target) {
     baseRewardPerSecond *= (1 + learningRate)
     scarcityMultiplier *= (1 + learningRate)
-else:
-    baseRewardPerSecond *= (1 - learningRate × 0.5)
-    scarcityMultiplier *= (1 - learningRate × 0.5)
+} else {
+    baseRewardPerSecond *= (1 - learningRate * 0.5)
+    scarcityMultiplier *= (1 - learningRate * 0.5)
+}
 ```
 
 Adjustment occurs every 10 offers (configurable window).
