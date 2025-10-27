@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Dashboard Section -->
+        <TextView
+            android:id="@+id/title_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_dashboard"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/balance_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/balance_label"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/reputation_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reputation_label"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/rate_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tlk_usdt_rate"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- System Metrics Section -->
+        <TextView
+            android:id="@+id/title_metrics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_metrics"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/system_reward_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/system_reward_label"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/net_system_value_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/net_system_value_label"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/success_rate_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/success_rate_label"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/total_transactions_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/total_transactions_label"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Create Offer Button -->
+        <Button
+            android:id="@+id/create_offer_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_create_offer"
+            android:layout_marginTop="16dp" />
+
+        <!-- View Active Offers Button -->
+        <Button
+            android:id="@+id/view_offers_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_active_offers"
+            android:layout_marginTop="8dp" />
+
+        <!-- Active Offers List -->
+        <TextView
+            android:id="@+id/title_active_offers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_active_offers"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/offers_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>

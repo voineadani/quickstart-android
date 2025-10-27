@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TrafficLink</string>
+    <string name="negotiation_title">Negotiation</string>
+    
+    <!-- Main Activity -->
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_create_offer">Create Offer</string>
+    <string name="title_active_offers">Active Offers</string>
+    <string name="title_metrics">System Metrics</string>
+    
+    <!-- Dashboard -->
+    <string name="balance_label">TLK Balance:</string>
+    <string name="reputation_label">Reputation:</string>
+    <string name="tlk_usdt_rate">TLK/USDT Rate:</string>
+    
+    <!-- Create Offer -->
+    <string name="requester_label">Requester ID:</string>
+    <string name="responder_label">Responder ID:</string>
+    <string name="time_saved_label">Estimated Time Saved (seconds):</string>
+    <string name="congestion_label">Congestion Level (0-1):</string>
+    <string name="fuel_saved_label">Fuel Saved (units):</string>
+    <string name="available_yielders_label">Available Yielders:</string>
+    <string name="time_in_area_label">Time in Area (seconds):</string>
+    <string name="create_offer_button">Create Offer</string>
+    
+    <!-- Offer Details -->
+    <string name="offer_id_label">Offer ID:</string>
+    <string name="reward_label">Reward (TLK):</string>
+    <string name="net_reward_label">Net Reward:</string>
+    <string name="status_label">Status:</string>
+    <string name="expires_at_label">Expires At:</string>
+    <string name="accept_button">Accept</string>
+    <string name="reject_button">Reject</string>
+    <string name="validate_button">Validate</string>
+    
+    <!-- Validation -->
+    <string name="actual_time_saved_label">Actual Time Saved (seconds):</string>
+    <string name="max_deceleration_label">Max Deceleration (m/s²):</string>
+    <string name="min_distance_label">Min Following Distance (m):</string>
+    <string name="collision_detected_label">Collision Detected:</string>
+    <string name="sudden_braking_label">Sudden Braking:</string>
+    <string name="speed_violation_label">Speed Limit Violation:</string>
+    
+    <!-- System Metrics -->
+    <string name="total_rewards_label">Total Rewards:</string>
+    <string name="system_reward_label">System Reward V(t):</string>
+    <string name="net_system_value_label">Net System Value V_net(t):</string>
+    <string name="success_rate_label">Success Rate:</string>
+    <string name="total_transactions_label">Total Transactions:</string>
+    
+    <!-- Messages -->
+    <string name="offer_created">Offer created successfully</string>
+    <string name="offer_accepted">Offer accepted</string>
+    <string name="offer_rejected">Offer rejected</string>
+    <string name="validation_complete">Validation complete</string>
+    <string name="insufficient_balance">Insufficient TLK balance</string>
+    <string name="offer_expired">Offer has expired</string>
+    <string name="validation_success">Validation successful - tokens paid</string>
+    <string name="validation_failed">Validation failed - tokens refunded</string>
+</resources>
