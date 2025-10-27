@@ -18,4 +18,5 @@ include ':admob:app',
         ':mlkit-smartreply:app',
         ':mlkit-translate:app',
         ':perf:app',
-        ':storage:app'
+        ':storage:app',
+        ':trafficlink:app'
